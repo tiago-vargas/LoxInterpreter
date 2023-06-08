@@ -6,7 +6,7 @@ public class Scanner
 {
 	public static List<Token> ScanTokens(string source)
 	{
-		string[] lexemes = source.Split(separator: ' ');
+		string[] lexemes = source.Split(separator: ' ', options: StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 		var tokens = new List<Token> { };
 
 		foreach (string lexeme in lexemes)
@@ -42,7 +42,7 @@ public class Scanner
 			case "*":
 				return TokenType.Star;
 			default:
-				throw new NotImplementedException();
+				throw new NotImplementedException(message: $"Unexpected lexeme: '{lexeme}'");
 		}
 	}
 }

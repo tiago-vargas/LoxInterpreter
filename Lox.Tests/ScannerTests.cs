@@ -31,5 +31,23 @@ public class ScannerTests
 				actual: tokens
 			);
 		}
+
+		[TestMethod]
+		public void ScanUnambiguousSingleCharacterTokensBetweenManyWhitespace()
+		{
+			string source = "(   )\t +  \n\n *";
+
+			var tokens = Scanner.ScanTokens(source);
+
+			CollectionAssert.AreEqual(
+				expected: new Token[] {
+					new Token(TokenType.LeftParen),
+					new Token(TokenType.RightParen),
+					new Token(TokenType.Plus),
+					new Token(TokenType.Star),
+				},
+				actual: tokens
+			);
+		}
 	}
 }
