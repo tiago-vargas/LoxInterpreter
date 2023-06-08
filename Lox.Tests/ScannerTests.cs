@@ -5,7 +5,7 @@ namespace Lox.Tests;
 [TestClass]
 public class ScannerTests
 {
-[TestClass]
+	[TestClass]
 	public class SymbolsSeparatedByWhitespace
 	{
 		[TestMethod]
@@ -36,6 +36,29 @@ public class ScannerTests
 		public void ScanUnambiguousSingleCharacterTokensBetweenManyWhitespace()
 		{
 			string source = "(   )\t +  \n\n *";
+
+			var tokens = Scanner.ScanTokens(source);
+
+			CollectionAssert.AreEqual(
+				expected: new Token[] {
+					new Token(TokenType.LeftParen),
+					new Token(TokenType.RightParen),
+					new Token(TokenType.Plus),
+					new Token(TokenType.Star),
+				},
+				actual: tokens
+			);
+		}
+	}
+
+	[TestClass]
+	public class SymbolsWithoutWhitespace
+	{
+
+		[TestMethod]
+		public void ScanUnambiguousSingleCharacterTokensWithoutWhitespace()
+		{
+			string source = "()+*";
 
 			var tokens = Scanner.ScanTokens(source);
 

@@ -1,18 +1,18 @@
-﻿using System.Collections;
-
-namespace Lox;
+﻿namespace Lox;
 
 public class Scanner
 {
 	public static List<Token> ScanTokens(string source)
 	{
-		string[] lexemes = source.Split(separator: ' ', options: StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 		var tokens = new List<Token> { };
 
-		foreach (string lexeme in lexemes)
+		foreach (char c in source)
 		{
-			TokenType tokenType = GetTokenType(lexeme);
-			tokens.Add(new Token(tokenType));
+			if (!char.IsWhiteSpace(c))
+			{
+				TokenType tokenType = GetTokenType(c.ToString());
+				tokens.Add(new Token(tokenType));
+			}
 		}
 		return tokens;
 	}
@@ -42,7 +42,14 @@ public class Scanner
 			case "*":
 				return TokenType.Star;
 			default:
-				throw new NotImplementedException(message: $"Unexpected lexeme: '{lexeme}'");
+				throw new UnexpectedLexemeException(lexeme);
 		}
 	}
+}
+
+class UnexpectedLexemeException: Exception
+{
+	internal UnexpectedLexemeException(string? lexeme)
+		: base(message: $"Unexpected lexeme: '{lexeme}'")
+	{ }
 }
