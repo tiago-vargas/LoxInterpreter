@@ -6,71 +6,75 @@ namespace Lox.Tests;
 public class ScannerTests
 {
 	[TestClass]
-	public class SymbolsSeparatedByWhitespace
+	public class UnambiguousSingleCharacterTokens
 	{
-		[TestMethod]
-		public void ScanAllUnambiguousSingleCharacterTokens()
+		[TestClass]
+		public class SymbolsSeparatedByWhitespace
 		{
-			string source = "( ) { } , . - + ; *";
+			[TestMethod]
+			public void ScanAllSimpleTokens()
+			{
+				string source = "( ) { } , . - + ; *";
 
-			var tokens = Scanner.ScanTokens(source);
+				var tokens = Scanner.ScanTokens(source);
 
-			CollectionAssert.AreEqual(
-				expected: new Token[] {
-					new Token(TokenType.LeftParen),
-					new Token(TokenType.RightParen),
-					new Token(TokenType.LeftBrace),
-					new Token(TokenType.RightBrace),
-					new Token(TokenType.Comma),
-					new Token(TokenType.Dot),
-					new Token(TokenType.Minus),
-					new Token(TokenType.Plus),
-					new Token(TokenType.Semicolon),
-					new Token(TokenType.Star),
-				},
-				actual: tokens
-			);
+				CollectionAssert.AreEqual(
+					expected: new Token[] {
+						new Token(TokenType.LeftParen),
+						new Token(TokenType.RightParen),
+						new Token(TokenType.LeftBrace),
+						new Token(TokenType.RightBrace),
+						new Token(TokenType.Comma),
+						new Token(TokenType.Dot),
+						new Token(TokenType.Minus),
+						new Token(TokenType.Plus),
+						new Token(TokenType.Semicolon),
+						new Token(TokenType.Star),
+					},
+					actual: tokens
+				);
+			}
+
+			[TestMethod]
+			public void ScanSimpleTokensBetweenVariousWhitespaces()
+			{
+				string source = "(   )\t +  \n\n *";
+
+				var tokens = Scanner.ScanTokens(source);
+
+				CollectionAssert.AreEqual(
+					expected: new Token[] {
+						new Token(TokenType.LeftParen),
+						new Token(TokenType.RightParen),
+						new Token(TokenType.Plus),
+						new Token(TokenType.Star),
+					},
+					actual: tokens
+				);
+			}
 		}
 
-		[TestMethod]
-		public void ScanUnambiguousSingleCharacterTokensBetweenManyWhitespace()
+		[TestClass]
+		public class SymbolsWithoutWhitespace
 		{
-			string source = "(   )\t +  \n\n *";
 
-			var tokens = Scanner.ScanTokens(source);
+			[TestMethod]
+			public void ScanSimpleTokensWithoutWhitespace()
+			{
+				string source = "()+*";
 
-			CollectionAssert.AreEqual(
-				expected: new Token[] {
-					new Token(TokenType.LeftParen),
-					new Token(TokenType.RightParen),
-					new Token(TokenType.Plus),
-					new Token(TokenType.Star),
-				},
-				actual: tokens
-			);
-		}
-	}
+				var tokens = Scanner.ScanTokens(source);
 
-	[TestClass]
-	public class SymbolsWithoutWhitespace
-	{
-
-		[TestMethod]
-		public void ScanUnambiguousSingleCharacterTokensWithoutWhitespace()
-		{
-			string source = "()+*";
-
-			var tokens = Scanner.ScanTokens(source);
-
-			CollectionAssert.AreEqual(
-				expected: new Token[] {
-					new Token(TokenType.LeftParen),
-					new Token(TokenType.RightParen),
-					new Token(TokenType.Plus),
-					new Token(TokenType.Star),
-				},
-				actual: tokens
-			);
+				CollectionAssert.AreEqual(
+					expected: new Token[] {
+						new Token(TokenType.LeftParen),
+						new Token(TokenType.RightParen),
+						new Token(TokenType.Plus),
+						new Token(TokenType.Star),
+					},
+					actual: tokens
+				);
+			}
 		}
 	}
 }
