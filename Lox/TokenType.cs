@@ -11,5 +11,14 @@ public enum TokenType
 	Minus,
 	Plus,
 	Semicolon,
-	Star
+	Star,
+
+	Equal,
+	EqualEqual,
+	Bang,
+	BangEqual,
+	Less,
+	LessEqual,
+	Greater,
+	GreaterEqual,
 }
