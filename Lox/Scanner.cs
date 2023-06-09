@@ -10,46 +10,54 @@ public class Scanner
 		{
 			if (!char.IsWhiteSpace(c))
 			{
-				TokenType tokenType = GetTokenType(c.ToString());
+				TokenType tokenType = GetTokenType(c);
 				tokens.Add(new Token(tokenType));
 			}
 		}
 		return tokens;
 	}
 
-	private static TokenType GetTokenType(string lexeme)
+	private static TokenType GetTokenType(char firstCharacterOfLexeme)
 	{
-		switch (lexeme)
+		switch (firstCharacterOfLexeme)
 		{
-			case "(":
+			case '(':
 				return TokenType.LeftParen;
-			case ")":
+			case ')':
 				return TokenType.RightParen;
-			case "{":
+			case '{':
 				return TokenType.LeftBrace;
-			case "}":
+			case '}':
 				return TokenType.RightBrace;
-			case ",":
+			case ',':
 				return TokenType.Comma;
-			case ".":
+			case '.':
 				return TokenType.Dot;
-			case "-":
+			case '-':
 				return TokenType.Minus;
-			case "+":
+			case '+':
 				return TokenType.Plus;
-			case ";":
+			case ';':
 				return TokenType.Semicolon;
-			case "*":
+			case '*':
 				return TokenType.Star;
+			case '=':
+				return TokenType.Equal;
+			case '!':
+				return TokenType.Bang;
+			case '>':
+				return TokenType.Greater;
+			case '<':
+				return TokenType.Less;
 			default:
-				throw new UnexpectedLexemeException(lexeme);
+				throw new UnexpectedLexemeException(firstCharacterOfLexeme);
 		}
 	}
 }
 
 class UnexpectedLexemeException: Exception
 {
-	internal UnexpectedLexemeException(string? lexeme)
-		: base(message: $"Unexpected lexeme: '{lexeme}'")
+	internal UnexpectedLexemeException(char? firstCharacterOfLexeme)
+		: base(message: $"Unexpected first character for a lexeme: '{firstCharacterOfLexeme}'")
 	{ }
 }

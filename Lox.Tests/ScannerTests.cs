@@ -77,4 +77,29 @@ public class ScannerTests
 			}
 		}
 	}
+
+	[TestClass]
+	public class MaybeMultiCharacterTokens
+	{
+		// This class tests for tokens the aren't identifiable until we read
+		// their remaining characters
+
+		[TestMethod]
+		public void ScanSingleCharacterToken()
+		{
+			string source = "> = < !";
+
+			var tokens = Scanner.ScanTokens(source);
+
+			CollectionAssert.AreEqual(
+				expected: new Token[] {
+					new Token(TokenType.Greater),
+					new Token(TokenType.Equal),
+					new Token(TokenType.Less),
+					new Token(TokenType.Bang),
+				},
+				actual: tokens
+			);
+		}
+	}
 }
