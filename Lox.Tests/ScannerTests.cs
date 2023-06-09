@@ -119,5 +119,18 @@ public class ScannerTests
 				actual: tokens
 			);
 		}
+
+		[TestMethod]
+		public void DoNotScanTokensAfterComment()
+		{
+			string source = "+  // - * = < >";
+
+			var tokens = Scanner.ScanTokens(source);
+
+			CollectionAssert.AreEqual(
+				expected: new Token[] { new Token(TokenType.Plus) },
+				actual: tokens
+			);
+		}
 	}
 }
