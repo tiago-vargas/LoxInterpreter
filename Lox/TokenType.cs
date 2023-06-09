@@ -14,7 +14,11 @@ public enum TokenType
 	Star,
 
 	Equal,
+	EqualEqual,
 	Bang,
+	BangEqual,
 	Less,
+	LessEqual,
 	Greater,
+	GreaterEqual,
 }

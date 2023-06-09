@@ -2,12 +2,27 @@
 
 public class Scanner
 {
+	private static int currentIndex = 0;
+	private static string source = "";
+	private static char? NextCharacter
+	{
+		get
+		{
+			if (currentIndex + 1 >= source.Length)
+				return null;
+			else
+				return source[currentIndex + 1];
+		}
+	}
+
 	public static List<Token> ScanTokens(string source)
 	{
 		var tokens = new List<Token> { };
+		Scanner.source = source;
 
-		foreach (char c in source)
+		for (currentIndex = 0; currentIndex < source.Length; ++currentIndex)
 		{
+			char c = source[currentIndex];
 			if (!char.IsWhiteSpace(c))
 			{
 				TokenType tokenType = GetTokenType(c);
@@ -42,20 +57,57 @@ public class Scanner
 			case '*':
 				return TokenType.Star;
 			case '=':
-				return TokenType.Equal;
+				if (NextCharacter == '=')
+				{
+					SkipNextCharacter();
+					return TokenType.EqualEqual;
+				}
+				else
+				{
+					return TokenType.Equal;
+				}
 			case '!':
-				return TokenType.Bang;
+				if (NextCharacter == '=')
+				{
+					SkipNextCharacter();
+					return TokenType.BangEqual;
+				}
+				else
+				{
+					return TokenType.Bang;
+				}
 			case '>':
-				return TokenType.Greater;
+				if (NextCharacter == '=')
+				{
+					SkipNextCharacter();
+					return TokenType.GreaterEqual;
+				}
+				else
+				{
+					return TokenType.Greater;
+				}
 			case '<':
-				return TokenType.Less;
+			if (NextCharacter == '=')
+				{
+					SkipNextCharacter();
+					return TokenType.LessEqual;
+				}
+				else
+				{
+					return TokenType.Less;
+				}
 			default:
 				throw new UnexpectedLexemeException(firstCharacterOfLexeme);
 		}
 	}
+
+	private static void SkipNextCharacter()
+	{
+		++currentIndex;
+	}
 }
 
-class UnexpectedLexemeException: Exception
+internal class UnexpectedLexemeException: Exception
 {
 	internal UnexpectedLexemeException(char? firstCharacterOfLexeme)
 		: base(message: $"Unexpected first character for a lexeme: '{firstCharacterOfLexeme}'")

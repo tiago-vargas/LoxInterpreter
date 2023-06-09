@@ -101,5 +101,23 @@ public class ScannerTests
 				actual: tokens
 			);
 		}
+
+		[TestMethod]
+		public void ScanMultiCharacterTokens()
+		{
+			string source = "== != <= >=";
+
+			var tokens = Scanner.ScanTokens(source);
+
+			CollectionAssert.AreEqual(
+				expected: new Token[] {
+					new Token(TokenType.EqualEqual),
+					new Token(TokenType.BangEqual),
+					new Token(TokenType.LessEqual),
+					new Token(TokenType.GreaterEqual),
+				},
+				actual: tokens
+			);
+		}
 	}
 }
