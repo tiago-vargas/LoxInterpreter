@@ -15,6 +15,7 @@ public class Scanner
 		}
 	}
 
+
 	public static List<Token> ScanTokens(string source)
 	{
 		var tokens = new List<Token> { };
@@ -23,13 +24,23 @@ public class Scanner
 		for (currentIndex = 0; currentIndex < source.Length; ++currentIndex)
 		{
 			char c = source[currentIndex];
-			if (!char.IsWhiteSpace(c))
+			if (c == '/' && NextCharacter == '/')
+			{
+				SkipCharactersUntilTheEndOfTheLine();
+			}
+			else if (!char.IsWhiteSpace(c))
 			{
 				TokenType tokenType = GetTokenType(c);
 				tokens.Add(new Token(tokenType));
 			}
 		}
 		return tokens;
+	}
+
+	private static void SkipCharactersUntilTheEndOfTheLine()
+	{
+		while (currentIndex < source.Length && source[currentIndex] != '\n')
+			++currentIndex;
 	}
 
 	private static TokenType GetTokenType(char firstCharacterOfLexeme)
@@ -87,7 +98,7 @@ public class Scanner
 					return TokenType.Greater;
 				}
 			case '<':
-			if (NextCharacter == '=')
+				if (NextCharacter == '=')
 				{
 					SkipNextCharacter();
 					return TokenType.LessEqual;

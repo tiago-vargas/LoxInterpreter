@@ -120,4 +120,38 @@ public class ScannerTests
 			);
 		}
 	}
+
+	[TestClass]
+	public class ScanComments
+	{
+		[TestMethod]
+		public void DoNotScanTokensAfterComment()
+		{
+			string source = "+  // - * = < >";
+
+			var tokens = Scanner.ScanTokens(source);
+
+			CollectionAssert.AreEqual(
+				expected: new Token[] { new Token(TokenType.Plus) },
+				actual: tokens
+			);
+		}
+
+		[TestMethod]
+		public void IgnoreCommentButScanNextLine()
+		{
+			string source = "+  // - * = < > \n"
+			              + "-";
+
+			var tokens = Scanner.ScanTokens(source);
+
+			CollectionAssert.AreEqual(
+				expected: new Token[] {
+					new Token(TokenType.Plus),
+					new Token(TokenType.Minus)
+				},
+				actual: tokens
+			);
+		}
+	}
 }
