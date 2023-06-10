@@ -107,6 +107,8 @@ public class Scanner
 				{
 					return TokenType.Less;
 				}
+			case '/':
+				return TokenType.Slash;
 			default:
 				throw new UnexpectedLexemeException(firstCharacterOfLexeme);
 		}

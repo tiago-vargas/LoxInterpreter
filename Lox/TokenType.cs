@@ -21,4 +21,5 @@ public enum TokenType
 	LessEqual,
 	Greater,
 	GreaterEqual,
+	Slash,
 }

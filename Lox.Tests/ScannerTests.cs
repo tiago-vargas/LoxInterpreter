@@ -87,7 +87,7 @@ public class ScannerTests
 		[TestMethod]
 		public void ScanSingleCharacterToken()
 		{
-			string source = "> = < !";
+			string source = "> = < ! /";
 
 			var tokens = Scanner.ScanTokens(source);
 
@@ -97,6 +97,7 @@ public class ScannerTests
 					new Token(TokenType.Equal),
 					new Token(TokenType.Less),
 					new Token(TokenType.Bang),
+					new Token(TokenType.Slash),
 				},
 				actual: tokens
 			);
