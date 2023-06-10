@@ -119,7 +119,11 @@ public class ScannerTests
 				actual: tokens
 			);
 		}
+	}
 
+	[TestClass]
+	public class ScanComments
+	{
 		[TestMethod]
 		public void DoNotScanTokensAfterComment()
 		{
@@ -129,6 +133,23 @@ public class ScannerTests
 
 			CollectionAssert.AreEqual(
 				expected: new Token[] { new Token(TokenType.Plus) },
+				actual: tokens
+			);
+		}
+
+		[TestMethod]
+		public void IgnoreCommentButScanNextLine()
+		{
+			string source = "+  // - * = < > \n"
+			              + "-";
+
+			var tokens = Scanner.ScanTokens(source);
+
+			CollectionAssert.AreEqual(
+				expected: new Token[] {
+					new Token(TokenType.Plus),
+					new Token(TokenType.Minus)
+				},
 				actual: tokens
 			);
 		}
