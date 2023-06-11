@@ -30,8 +30,15 @@ public class Scanner
 			}
 			else if (c == '"')
 			{
-				string value = GetStringValueBetweenQuotes();
-				tokens.Add(new Token(TokenType.String, value));
+				try
+				{
+					string value = GetStringValueBetweenQuotes();
+					tokens.Add(new Token(TokenType.String, value));
+				}
+				catch (UnterminatedStringException)
+				{
+					return tokens;
+				}
 			}
 			else if (!char.IsWhiteSpace(c))
 			{
@@ -45,9 +52,17 @@ public class Scanner
 	private static string GetStringValueBetweenQuotes()
 	{
 		int openQuoteIndex = currentIndex;
-		int closingQuoteIndex = FindMatchingQuote();
-		string value = source[(openQuoteIndex + 1)..closingQuoteIndex];
-		return value;
+
+		try
+		{
+			int closingQuoteIndex = FindMatchingQuote();
+			string value = source[(openQuoteIndex + 1)..closingQuoteIndex];
+			return value;
+		}
+		catch (System.IndexOutOfRangeException)
+		{
+			throw new UnterminatedStringException();
+		}
 	}
 
 	private static void SkipCharactersUntilTheEndOfTheLine()
@@ -143,9 +158,17 @@ public class Scanner
 	}
 }
 
-internal class UnexpectedLexemeException: Exception
+internal class UnexpectedLexemeException : Exception
 {
 	internal UnexpectedLexemeException(char? firstCharacterOfLexeme)
 		: base(message: $"Unexpected first character for a lexeme: '{firstCharacterOfLexeme}'")
+	{ }
+}
+
+
+internal class UnterminatedStringException : Exception
+{
+	internal UnterminatedStringException()
+		: base()
 	{ }
 }

@@ -160,7 +160,7 @@ public class ScannerTests
 	public class ScanLiterals
 	{
 		[TestMethod]
-		public void ScanStrings()
+		public void ScanWellFormedStrings()
 		{
 			string source = "  \"some string\"  ";
 
@@ -186,6 +186,19 @@ public class ScannerTests
 					new Token(TokenType.String, value: "some string"),
 					new Token(TokenType.GreaterEqual),
 				},
+				actual: tokens
+			);
+		}
+
+		[TestMethod]
+		public void ScanTokensBeforeUnterminatedString()
+		{
+			string source = "    <    \"missing closing quote...   ";
+
+			var tokens = Scanner.ScanTokens(source);
+
+			CollectionAssert.AreEqual(
+				expected: new Token[] { new Token(TokenType.Less) },
 				actual: tokens
 			);
 		}
