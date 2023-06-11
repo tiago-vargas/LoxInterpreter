@@ -155,4 +155,23 @@ public class ScannerTests
 			);
 		}
 	}
+
+	[TestClass]
+	public class ScanLiterals
+	{
+		[TestMethod]
+		public void ScanStrings()
+		{
+			string source = "  \"some string\"  ";
+
+			var tokens = Scanner.ScanTokens(source);
+
+			CollectionAssert.AreEqual(
+				expected: new Token[] {
+					new Token(TokenType.String, value: "some string"),
+				},
+				actual: tokens
+			);
+		}
+	}
 }

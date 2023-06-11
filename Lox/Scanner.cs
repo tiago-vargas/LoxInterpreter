@@ -28,6 +28,11 @@ public class Scanner
 			{
 				SkipCharactersUntilTheEndOfTheLine();
 			}
+			else if (c == '"')
+			{
+				string value = GetStringValueBetweenQuotes();
+				tokens.Add(new Token(TokenType.String, value));
+			}
 			else if (!char.IsWhiteSpace(c))
 			{
 				TokenType tokenType = GetTokenType(c);
@@ -35,6 +40,14 @@ public class Scanner
 			}
 		}
 		return tokens;
+	}
+
+	private static string GetStringValueBetweenQuotes()
+	{
+		int openQuoteIndex = currentIndex;
+		int closingQuoteIndex = FindMatchingQuote();
+		string value = source[(openQuoteIndex + 1)..closingQuoteIndex];
+		return value;
 	}
 
 	private static void SkipCharactersUntilTheEndOfTheLine()
@@ -112,6 +125,16 @@ public class Scanner
 			default:
 				throw new UnexpectedLexemeException(firstCharacterOfLexeme);
 		}
+	}
+
+	private static int FindMatchingQuote()
+	{
+		++currentIndex;  // Skips the openning `"`
+
+		while (source[currentIndex] != '"')
+			++currentIndex;
+
+		return currentIndex;
 	}
 
 	private static void SkipNextCharacter()
