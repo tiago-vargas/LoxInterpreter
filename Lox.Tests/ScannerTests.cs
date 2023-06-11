@@ -173,5 +173,21 @@ public class ScannerTests
 				actual: tokens
 			);
 		}
+
+		[TestMethod]
+		public void ScanOtherTokensAfterScanningStrings()
+		{
+			string source = "  \"some string\"   >=   ";
+
+			var tokens = Scanner.ScanTokens(source);
+
+			CollectionAssert.AreEqual(
+				expected: new Token[] {
+					new Token(TokenType.String, value: "some string"),
+					new Token(TokenType.GreaterEqual),
+				},
+				actual: tokens
+			);
+		}
 	}
 }
